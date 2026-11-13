@@ -54,12 +54,19 @@ export const MARKUP = `
         <details class="import" id="importBox">
           <summary>Add creators</summary>
           <div class="import-body">
-            <p class="help">Paste rows from Google Sheets or a CSV, with a header row. It reads <span class="mono">name, email, handle, niche, line</span>. Any other column becomes its own tag. A plain list of emails works too.</p>
-            <textarea id="importText" class="code" rows="6" placeholder="name, email, handle, niche, line&#10;Maya Torres, maya@site.com, @mayamoves, fitness coach, Your form cues on squats are so clear"></textarea>
+            <div class="dropzone" id="dropzone">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+              <div class="dz-text"><b>Drop a CSV here</b> or <button class="linkbtn" type="button" id="btnPickCsv">choose a file</button></div>
+              <span class="help">From the lead skill, Google Sheets or Excel. Every column becomes a tag automatically.</span>
+              <input type="file" id="csvFile" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values" hidden>
+            </div>
+            <div class="or-line"><span>or paste rows</span></div>
+            <textarea id="importText" class="code" rows="5" placeholder="name, email, handle, niche, line&#10;Maya Torres, maya@site.com, @mayamoves, fitness coach, Your form cues on squats are so clear"></textarea>
             <div class="row">
               <button class="btn primary" type="button" id="btnImport">Add to list</button>
               <span class="help" id="importMsg"></span>
             </div>
+            <div class="import-report" id="importReport" hidden></div>
           </div>
         </details>
 
