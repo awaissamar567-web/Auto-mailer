@@ -23,6 +23,20 @@ personalized emails one at a time from your Gmail, then tracks follow-ups and re
 4. **Redeploy** so the variables take effect, then open the site and log in.
 5. In the app, click **Check Gmail login**, then **Send a test to myself**.
 
+## Optional: send from more than one Gmail
+
+Add a second account in Vercel and redeploy:
+
+| Name | Value |
+| --- | --- |
+| `GMAIL_USER_2` | the second Gmail address |
+| `GMAIL_APP_PASSWORD_2` | that account's own 16-character App Password |
+| `FROM_NAME_2` | optional, its sender name (defaults to `FROM_NAME`) |
+
+Up to 5 accounts work the same way (`_3`, `_4`, `_5`). In the app, **Sending > Send from**
+lets you rotate first emails between all accounts or pick one. The daily limit applies to
+each account, and follow-ups always reply from the account that sent the first email.
+
 ## Optional: save your list to the cloud
 
 Without this, your list lives in the browser you use (plus any backup file you download).
