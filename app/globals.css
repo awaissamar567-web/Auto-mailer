@@ -228,6 +228,30 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn.primary { background: var(--g-ink); color: var(--g-ink-inverse); }
 .btn.sm { padding: 6px 12px; font-size: var(--g-fs-cap); }
 .btn.danger:hover:not(:disabled) { color: var(--g-err); }
+.btn.icon { width: 36px; height: 36px; padding: 0; flex: none; }
+.btn svg, .ipill svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* header status icons: a dot in the corner shows the state */
+.ipill { position: relative; display: inline-grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: var(--g-r-pill); background: var(--g-card-2); color: var(--g-ink); box-shadow: var(--g-shadow-sm); cursor: default; }
+.ipill-dot { position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; border-radius: var(--g-r-pill); background: var(--g-dim); box-shadow: 0 0 0 2px var(--g-card-2); }
+.ipill[data-tone='ok'] .ipill-dot { background: var(--g-ok); }
+.ipill[data-tone='warn'] .ipill-dot { background: var(--g-warn); }
+.ipill[data-tone='bad'] .ipill-dot { background: var(--g-err); }
+.ipill[data-tone='bad'] { color: var(--g-err); }
+.head-sep { width: 1px; height: 20px; margin: 0 4px; background: var(--g-line); }
+
+/* tooltips for icon-only controls */
+[data-tip] { position: relative; }
+[data-tip]::after {
+  content: attr(data-tip); position: absolute; top: calc(100% + 8px); right: 0; z-index: 40;
+  width: max-content; max-width: 260px; white-space: normal; text-align: left;
+  background: var(--g-ink); color: var(--g-ink-inverse); font-size: 11.5px; line-height: 1.4; padding: 6px 10px;
+  border-radius: 10px; box-shadow: var(--g-shadow-sm); pointer-events: none;
+  opacity: 0; transform: translateY(-4px); transition: opacity var(--g-dur-colour) var(--ease), transform var(--g-dur-colour) var(--ease);
+}
+[data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; transform: none; }
+.ipill:focus::after { opacity: 1; transform: none; }
+
 .btn.block { width: 100%; padding: 12px 16px; font-size: 14px; }
 .linkbtn { appearance: none; background: none; border: 0; padding: 0; color: var(--g-ink); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--g-ring); transition: text-decoration-color var(--g-dur-colour) var(--ease); }
 .linkbtn:hover:not(:disabled) { text-decoration-color: var(--g-accent); }
