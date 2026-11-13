@@ -1,3 +1,4 @@
+import '@fontsource-variable/jetbrains-mono';
 import './globals.css';
 
 export const metadata = {
@@ -8,16 +9,15 @@ export const metadata = {
 
 export const viewport = { width: 'device-width', initialScale: 1 };
 
+// Applies the saved theme before first paint. Monolith (dark) is the default.
+const THEME_SCRIPT =
+  "(function(){try{var t=localStorage.getItem('creator-mailer-theme');if(t==='daylight'||t==='monolith')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();";
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="monolith" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
-        />
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
       <body>{children}</body>
     </html>

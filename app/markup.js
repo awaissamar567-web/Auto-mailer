@@ -1,37 +1,58 @@
 // Static markup for the mailer. lib/mailer-client.js wires it up after mount.
 export const MARKUP = `
-<div class="wrap">
-  <header class="top">
-    <div class="brand">
-      <h1>Creator Mailer</h1>
-      <p>Personalized creator outreach, sent from your own Gmail.</p>
+<div class="page">
+<div class="l-slab">
+  <header class="l-rise l-slab-title" style="--l-rise-i:0">
+    <div>
+      <div class="l-eyebrow">// OUTREACH</div>
+      <h1 class="l-h1">Creator Mailer</h1>
+      <div class="l-meta">Personalized creator outreach, sent from your own Gmail.</div>
     </div>
-    <div class="top-right">
-      <div class="pills">
-        <span id="gmailPill" class="pill">Checking Gmail…</span>
-        <span id="savePill" class="pill">Loading your list…</span>
-        <span id="capPill" class="pill">Sent today 0 / 40</span>
-      </div>
-      <div class="row">
-        <button class="btn sm" type="button" id="btnTour">Take the tour</button>
-        <button class="btn sm" type="button" id="btnLogout">Log out</button>
-      </div>
+    <div class="l-slab-title-right">
+      <span id="gmailPill" class="pill">Checking Gmail…</span>
+      <span id="savePill" class="pill">Loading your list…</span>
+      <button class="btn sm" type="button" id="btnTour">Take the tour</button>
+      <button class="btn sm" type="button" id="btnTheme">Daylight</button>
+      <button class="btn sm" type="button" id="btnLogout">Log out</button>
     </div>
   </header>
 
-  <section class="sendbar" id="sendbar" aria-label="Send">
-    <div class="stats" id="stats"></div>
-    <div class="actions">
-      <button class="btn primary" id="btnFirst" type="button">Send first email (0)</button>
-      <button class="btn" id="btnFollow" type="button">Send follow-up (0)</button>
+  <div class="top-grid">
+    <section class="l-card l-rise l-rise-card sendbar" id="sendbar" style="--l-rise-i:1" aria-label="Send">
+      <div class="send-top">
+        <div class="stats" id="stats"></div>
+        <div class="actions">
+          <button class="btn primary" id="btnFirst" type="button">Send first email (0)</button>
+          <button class="btn" id="btnFollow" type="button">Send follow-up (0)</button>
+        </div>
+      </div>
+      <div class="l-meter">
+        <div class="l-meter-row">
+          <span class="l-meter-label">Sent today</span>
+          <span class="l-meter-value" id="capValue">0 / 40</span>
+        </div>
+        <div class="l-meter-track"><div class="l-meter-fill" id="capFill" style="width:2%"></div></div>
+      </div>
+      <div class="quick" id="quick"></div>
+      <div class="runline" id="runline" role="status" aria-live="polite"></div>
+    </section>
+
+    <div class="l-insight" id="insight" style="--l-rise-i:2">
+      <div aria-hidden="true" class="l-insight-grain"></div>
+      <div aria-hidden="true" class="l-insight-shard"></div>
+      <div class="l-insight-inner">
+        <span class="l-insight-pill"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>Reply rate</span>
+        <div class="l-insight-value" id="insValue">0%</div>
+        <div class="l-insight-headline" id="insHeadline">No emails sent yet</div>
+        <div class="l-insight-body" id="insBody"></div>
+        <div class="l-insight-ticks" id="insTicks" aria-hidden="true"></div>
+      </div>
     </div>
-    <div class="quick" id="quick"></div>
-    <div class="runline" id="runline" role="status" aria-live="polite"></div>
-  </section>
+  </div>
 
   <main class="grid">
     <div class="col">
-      <section class="panel" id="creatorsPanel" aria-labelledby="hCreators">
+      <section class="panel l-card l-rise l-rise-card" style="--l-rise-i:3" id="creatorsPanel" aria-labelledby="hCreators">
         <div class="panel-head">
           <h2 id="hCreators">Creators</h2>
           <span class="muted" id="countLabel"></span>
@@ -71,7 +92,7 @@ export const MARKUP = `
         </div>
       </section>
 
-      <section class="panel" id="previewPanel" aria-labelledby="hPrev">
+      <section class="panel l-card l-rise l-rise-card" style="--l-rise-i:4" id="previewPanel" aria-labelledby="hPrev">
         <div class="panel-head">
           <h2 id="hPrev">Preview</h2>
           <div class="seg" role="group" aria-label="Preview which email">
@@ -97,7 +118,7 @@ export const MARKUP = `
     </div>
 
     <div class="col">
-      <section class="panel" id="messagePanel" aria-labelledby="hMsg">
+      <section class="panel l-card l-rise l-rise-card" style="--l-rise-i:5" id="messagePanel" aria-labelledby="hMsg">
         <div class="panel-head">
           <h2 id="hMsg">Message</h2>
           <div class="row">
@@ -128,7 +149,7 @@ export const MARKUP = `
         </details>
       </section>
 
-      <section class="panel" id="settingsPanel" aria-labelledby="hSet">
+      <section class="panel l-card l-rise l-rise-card" style="--l-rise-i:6" id="settingsPanel" aria-labelledby="hSet">
         <h2 id="hSet">Sending</h2>
         <div class="set-grid">
           <div class="field">
@@ -178,6 +199,7 @@ export const MARKUP = `
       </section>
     </div>
   </main>
+</div>
 </div>
 
 <div class="modal" id="modal" hidden>
