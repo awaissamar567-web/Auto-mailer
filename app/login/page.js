@@ -35,7 +35,7 @@ export default function LoginPage() {
   return (
     <main className="login-wrap">
       <form className="login-card" onSubmit={submit} noValidate>
-        <div className="l-eyebrow">{'// PRIVATE'}</div>
+        <div className="g-eyebrow">Private workspace</div>
         <h1>Creator Mailer</h1>
         <p className="muted">Log in to send creator outreach from your Gmail.</p>
 

@@ -1,4 +1,8 @@
-import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/doto';
+import '@fontsource/open-sauce-sans/300.css';
+import '@fontsource/open-sauce-sans/400.css';
+import '@fontsource/open-sauce-sans/500.css';
 import './globals.css';
 
 export const metadata = {
@@ -9,15 +13,15 @@ export const metadata = {
 
 export const viewport = { width: 'device-width', initialScale: 1 };
 
-// Applies the saved theme before first paint. Monolith (dark) is the default.
-const THEME_SCRIPT =
-  "(function(){try{var t=localStorage.getItem('creator-mailer-theme');if(t==='daylight'||t==='monolith')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();";
+// Applies the saved mode before first paint. Dark is the default.
+const MODE_SCRIPT =
+  "(function(){try{var m=localStorage.getItem('creator-mailer-mode');if(m==='light'||m==='dark')document.documentElement.setAttribute('data-mode',m);}catch(e){}})();";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="monolith" suppressHydrationWarning>
+    <html lang="en" data-mode="dark" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: MODE_SCRIPT }} />
       </head>
       <body>{children}</body>
     </html>
