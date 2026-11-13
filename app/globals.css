@@ -55,7 +55,7 @@
   /* Type */
   --g-font-body: 'Geist Variable', 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --g-font-head: 'Open Sauce Sans', 'Geist Variable', system-ui, sans-serif;
-  --g-font-dot: 'Doto Variable', 'Doto', ui-monospace, monospace;
+  --g-font-dot: 'Doto Variable', 'Doto', sans-serif;
   --g-fs-display: 44px;
   --g-fs-title: 28px;
   --g-fs-section: 26px;
@@ -187,6 +187,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .g-hero-status { font-size: 13px; color: var(--g-on-hero-dim); text-shadow: 0 1px 8px rgba(36, 24, 6, 0.45); }
 .g-hero-strip { position: absolute; left: var(--g-space-6); right: var(--g-space-6); bottom: 22px; }
+/* Doto, round dots: ROND 100 */
+.g-hero-num, .stat b { font-optical-sizing: auto; font-style: normal; font-variation-settings: 'ROND' 100; }
 .ticks { display: flex; gap: 6px; }
 .ticks span { height: 3px; flex: 1; border-radius: var(--g-r-pill); background: var(--g-on-hero-faint); }
 .ticks span[data-tick='on'] { background: var(--g-on-hero); }

@@ -1,5 +1,5 @@
 import '@fontsource-variable/geist';
-import '@fontsource-variable/doto';
+import '@fontsource-variable/doto/full.css'; // weight + ROND (rounded dots) axes
 import '@fontsource/open-sauce-sans/300.css';
 import '@fontsource/open-sauce-sans/400.css';
 import '@fontsource/open-sauce-sans/500.css';
