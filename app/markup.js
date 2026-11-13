@@ -151,6 +151,11 @@ export const MARKUP = `
 
       <section class="panel g-card" id="settingsPanel" aria-labelledby="hSet">
         <h2 id="hSet">Sending</h2>
+        <div class="field">
+          <label for="setSender">Send from</label>
+          <select id="setSender"></select>
+          <p class="help" id="senderHint"></p>
+        </div>
         <div class="set-grid">
           <div class="field">
             <label for="setTpl">First email uses</label>
@@ -168,7 +173,7 @@ export const MARKUP = `
             </select>
           </div>
           <div class="field">
-            <label for="setCap">Daily limit</label>
+            <label for="setCap" id="capLabel">Daily limit</label>
             <input type="number" id="setCap" min="1" max="500" step="1">
           </div>
           <div class="field">

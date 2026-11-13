@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '../../../lib/auth';
-import { getTransport, mailConfig, mapMailError, EMAIL_RE } from '../../../lib/mail';
+import { accounts, findAccount, getTransport, mapMailError, EMAIL_RE } from '../../../lib/mail';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -11,13 +11,17 @@ const fail = (status, code, message) => NextResponse.json({ ok: false, code, mes
 export async function POST(request) {
   if (!(await getSession(request))) return fail(401, 'unauthorized', 'Log in again.');
 
-  const transport = getTransport();
-  if (!transport) {
+  if (!accounts().length) {
     return fail(500, 'config', 'Gmail is not set up. Add GMAIL_USER and GMAIL_APP_PASSWORD in your Vercel project settings, then redeploy.');
   }
 
   let b;
   try { b = await request.json(); } catch { return fail(400, 'invalid', 'The request was not valid JSON.'); }
+
+  const acct = findAccount(b.from);
+  if (!acct) {
+    return fail(400, 'account', 'The Gmail account ' + String(b.from || '') + ' is not set up on the server anymore. Add it back in Vercel, or reset these creators.');
+  }
 
   const to = String(b.to || '').trim();
   if (!EMAIL_RE.test(to)) return fail(422, 'recipient', 'That email address is not valid.');
@@ -30,9 +34,8 @@ export async function POST(request) {
 
   const inReplyTo = typeof b.inReplyTo === 'string' && /^<[^<>\s]+@[^<>\s]+>$/.test(b.inReplyTo) ? b.inReplyTo : null;
 
-  const { user, fromName } = mailConfig();
   const message = {
-    from: fromName ? { name: fromName, address: user } : user,
+    from: acct.fromName ? { name: acct.fromName, address: acct.user } : acct.user,
     to,
     subject,
     text,
@@ -43,10 +46,10 @@ export async function POST(request) {
   }
 
   try {
-    const info = await transport.sendMail(message);
-    return NextResponse.json({ ok: true, messageId: info.messageId || '' });
+    const info = await getTransport(acct).sendMail(message);
+    return NextResponse.json({ ok: true, messageId: info.messageId || '', from: acct.id });
   } catch (e) {
-    const [status, payload] = mapMailError(e);
-    return NextResponse.json({ ok: false, ...payload }, { status });
+    const [status, payload] = mapMailError(e, acct);
+    return NextResponse.json({ ok: false, from: acct.id, ...payload }, { status });
   }
 }
