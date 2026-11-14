@@ -45,10 +45,30 @@ export const MARKUP = `
 
   <div class="viewbar">
     <div class="seg" id="viewSeg" role="group" aria-label="Switch view">
-      <button type="button" id="viewSend" aria-pressed="true">Outreach</button>
+      <button type="button" id="viewCalendar" aria-pressed="false">Calendar</button>
+      <button type="button" id="viewSend" aria-pressed="true">Creators</button>
       <button type="button" id="viewReplies" aria-pressed="false">Replies</button>
     </div>
   </div>
+
+  <section class="panel g-card" id="calendarView" aria-labelledby="hCal" hidden>
+    <div class="panel-head">
+      <div>
+        <h2 id="hCal">Calendar</h2>
+        <p class="help" id="calSummary"></p>
+      </div>
+      <div class="row">
+        <button class="btn sm" type="button" id="calPrev" aria-label="Previous week">&#8592;</button>
+        <button class="btn sm" type="button" id="calToday">This week</button>
+        <button class="btn sm" type="button" id="calNext" aria-label="Next week">&#8594;</button>
+        <button class="btn primary" type="button" id="btnNewCamp">New campaign</button>
+      </div>
+    </div>
+    <div class="cal-title" id="calTitle"></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <p class="help" id="calClock"></p>
+    <p class="help">A campaign sends its creators inside its time window on its date, one email at a time with the usual gaps. Anything left over continues in the same window on the following days. Drag a campaign to another day to move it, or click it to edit, pause or send now.</p>
+  </section>
 
   <section class="panel g-card" id="repliesView" aria-labelledby="hReplies" hidden>
     <div class="panel-head">
@@ -81,6 +101,7 @@ export const MARKUP = `
               <span class="help">From the lead skill, Google Sheets or Excel. Every column becomes a tag automatically.</span>
               <input type="file" id="csvFile" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values" hidden>
             </div>
+            <div class="field" hidden><label for="importCamp">Add to campaign</label><select id="importCamp"></select></div>
             <div class="or-line"><span>or paste rows</span></div>
             <textarea id="importText" class="code" rows="5" placeholder="name, email, handle, niche, line&#10;Maya Torres, maya@site.com, @mayamoves, fitness coach, Your form cues on squats are so clear"></textarea>
             <div class="row">
@@ -196,6 +217,11 @@ export const MARKUP = `
           <div class="field">
             <label for="setCap" id="capLabel">Daily limit</label>
             <input type="number" id="setCap" min="1" max="500" step="1">
+          </div>
+          <div class="field">
+            <label for="setTz">Sending time zone</label>
+            <input type="text" id="setTz" autocomplete="off" list="tzList">
+            <datalist id="tzList"><option value="America/New_York"><option value="America/Chicago"><option value="America/Denver"><option value="America/Los_Angeles"><option value="Europe/London"><option value="Europe/Berlin"><option value="Asia/Karachi"><option value="Asia/Dubai"><option value="Australia/Sydney"></datalist>
           </div>
           <div class="field">
             <label for="setDue">Follow-up due after</label>

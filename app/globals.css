@@ -462,3 +462,32 @@ mark.miss { background: var(--g-err-soft); color: var(--g-err); }
 .rc-foot select { width: auto; padding-top: 5px; padding-bottom: 5px; font-size: var(--g-fs-cap); }
 .help.bad { color: var(--g-err); }
 #mBody .mail { margin: var(--g-space-3) 0; }
+
+/* ---------- calendar view ---------- */
+.cal-title { font-family: var(--g-font-head); font-size: var(--g-fs-card); color: var(--g-muted); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--g-space-2); }
+.cal-day { background: var(--g-well); border-radius: var(--g-r-well); padding: var(--g-space-2); min-height: 150px; display: grid; gap: 8px; align-content: start; transition: box-shadow var(--g-dur-colour) var(--ease); }
+.cal-day.over { box-shadow: inset 0 0 0 2px var(--g-accent); }
+.cal-day.past { opacity: 0.72; }
+.cal-head { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--g-fs-cap); color: var(--g-muted); padding: 2px 4px; }
+.cal-head b { font-family: var(--g-font-dot); font-variation-settings: 'ROND' 100; font-weight: 800; font-size: 15px; color: var(--g-ink); }
+.cal-day.today .cal-head b { color: var(--g-accent); }
+.camp { background: var(--g-card-2); border-radius: var(--g-r-input); box-shadow: var(--g-shadow-sm); padding: 10px 12px; display: grid; gap: 5px; cursor: pointer; min-width: 0; transition: transform var(--g-dur-colour) var(--ease); }
+.camp[draggable='true'] { cursor: grab; }
+.camp:hover { transform: translateY(-1px); }
+.camp:focus-visible { outline: 0; box-shadow: var(--g-shadow-sm), 0 0 0 2px var(--g-accent); }
+.camp-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
+.camp-top b { font-weight: var(--g-fw-badge); font-size: 13px; overflow-wrap: anywhere; }
+.camp-meta, .camp-note { font-size: 11.5px; color: var(--g-muted); line-height: 1.4; overflow-wrap: anywhere; }
+.camp-note { color: var(--g-ink); }
+.camp[data-state='done'] .camp-note { color: var(--g-muted); }
+.camp-bar { display: block; height: 3px; border-radius: 3px; background: var(--g-track); overflow: hidden; }
+.camp-bar span { display: block; height: 100%; background: var(--g-accent); }
+.cal-add { appearance: none; border: 0; background: transparent; color: var(--g-dim); font-size: 18px; line-height: 1; padding: 6px; border-radius: var(--g-r-input); cursor: pointer; transition: background var(--g-dur-colour) var(--ease), color var(--g-dur-colour) var(--ease); }
+.cal-add:hover { background: var(--g-bg-lift); color: var(--g-ink); }
+.camp-form { display: grid; gap: var(--g-space-3); }
+.camp-form input[type=date], .camp-form input[type=time], .camp-form input[type=file] { width: 100%; box-sizing: border-box; border: 0; border-radius: var(--g-r-input); background: var(--g-well); color: var(--g-ink); padding: 9px 12px; font: inherit; font-size: 13px; box-shadow: inset 0 0 0 1px var(--g-ring); }
+.camp-form input[type=date]:focus, .camp-form input[type=time]:focus { outline: 0; box-shadow: inset 0 0 0 2px var(--g-ring); }
+.modal-card.wide { max-width: 640px; }
+@media (max-width: 980px) { .cal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cal-day { min-height: 0; } }
+@media (max-width: 520px) { .cal-grid { grid-template-columns: 1fr; } }

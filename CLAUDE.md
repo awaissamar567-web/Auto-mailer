@@ -55,7 +55,8 @@ Live on Vercel. Every push to `main` deploys to production.
   - Follow-ups thread by sending `inReplyTo = messageId` from the same account (`sentFrom`).
 - `templates[]`: `{id, name, kind: 'first'|'followup', subject, body}`. Built-ins: `fit`, `ugc`, `fu`.
 - `globals`: "Your details" tags: `my_name, brand, product, commission, link`.
-- `settings`: `gap (20|30|45|60|90|120 s), cap (daily per account), firstTpl, dueHours (12|20|24|48|72), sender ('rotate' | account id)`.
+- `settings`: `gap (20|30|45|60|90|120 s), cap (daily per account), firstTpl, dueHours (12|20|24|48|72), sender ('rotate' | account id), tz (IANA name, blank = browser zone)`.
+- `campaigns[]`: `{id, name, tpl, date 'YYYY-MM-DD', start 'HH:MM', end 'HH:MM', sender, cap (0 = account limit), state: scheduled|running|paused|done, createdAt, startedAt?, doneAt?, errAt?}`. Contacts in a campaign carry `campaignId`. `cleanCampaign()` snaps saved values.
 - Other keys: `creator-mailer-tour-v1` (walkthrough done) and `creator-mailer-mode` (`dark|light`).
 
 ## Templating
@@ -103,6 +104,15 @@ Then drive it with Playwright (Chrome at `/usr/bin/google-chrome` in the cloud w
 - Two follow-ups max. A follow-up batch checks the inbox first and skips anyone who replied. `locked(c)` (dnc or bounced) blocks every send.
 - Replies view: `#viewSeg` toggles `#sendView` / `#repliesView`. Opening it auto-checks if the last check is over 30 minutes old. "Download interested list" exports the interested creators as CSV (the owner's CRM step).
 
+## Campaigns and calendar (built)
+
+- Views: `#viewSeg` toggles Calendar (`#calendarView`), Creators (`#sendView`) and Replies. The last view is remembered in `localStorage["creator-mailer-view"]`.
+- A campaign is a CSV plus template, date, time window, sender and optional per-campaign daily cap. `importText(text, source, campaignId)` skips anyone already emailed (`sentAt`, `dnc`, `bounced`) or already in another campaign, and reports them. The Creators panel has an "Add to campaign" select when open campaigns exist.
+- `firstTplFor(c)` picks the campaign's template; `pickSender` honours the campaign's sender. Quick select "All ready" excludes campaign rows; their status pill reads "Scheduled <date>".
+- Time: all campaign dates and windows are in `settings.tz` (`nowIn()`, `todayIso()`); the calendar footer shows the clock. `campDue(k)` = date reached, inside the window, under the campaign cap, and still has `canFirst` rows.
+- Runner: `runBatch(kind, ids, camp)` marks the campaign `running`, stops for the day when `campStop()` says the cap is hit or the window closed (`run.note`), and leaves it `scheduled` (more to send), `paused` (user pressed Stop) or `done`. Leftovers continue in the same window on following days. `tickCampaigns()` auto-starts the earliest due campaign every minute while the tab is open; a run that ended in an error backs off 30 minutes (`errAt`).
+- Calendar: Monday-start week, drag a non-done campaign to another day, click to edit (pause, resume, send now, show creators, delete; delete removes only its unsent creators).
+
 ## Roadmap: next feature (planned, not built)
 
-**Automatic follow-ups with the tab closed.** Needs Redis for server-side state plus a Vercel Cron job that runs the same inbox check first and skips anyone who replied.
+**Server-side scheduler (Vercel Cron).** `/api/cron` protected by `CRON_SECRET`: lock in Redis, load the state blob, check inboxes and tag, send a small slice per account in priority order (queued answers, next steps, due follow-ups, counter-questions, due campaigns), save, and email a digest. It must reuse the same rules the browser runner uses (`campDue`, caps, `locked`, two follow-ups max).
