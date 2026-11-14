@@ -103,7 +103,7 @@ export const MARKUP = `
             </div>
             <div class="field" hidden><label for="importCamp">Add to campaign</label><select id="importCamp"></select></div>
             <div class="or-line"><span>or paste rows</span></div>
-            <textarea id="importText" class="code" rows="5" placeholder="name, email, handle, niche, line&#10;Maya Torres, maya@site.com, @mayamoves, fitness coach, Your form cues on squats are so clear"></textarea>
+            <textarea id="importText" class="code" rows="5" placeholder="Paste rows here"></textarea>
             <div class="row">
               <button class="btn primary" type="button" id="btnImport">Add to list</button>
               <span class="help" id="importMsg"></span>
