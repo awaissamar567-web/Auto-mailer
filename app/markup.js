@@ -8,6 +8,8 @@ export const MARKUP = `
       <p class="g-section-cap">Personalized creator outreach, sent from your own Gmail.</p>
     </div>
     <div class="g-head-right">
+      <button class="btn icon" type="button" id="btnSide" aria-label="Hide menu" data-tip="Hide menu" aria-controls="side" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></button>
+      <span class="head-sep" aria-hidden="true"></span>
       <span id="gmailPill" class="ipill" role="img" tabindex="0" aria-label="Checking Gmail" data-tip="Checking Gmail…"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><i class="ipill-dot"></i></span>
       <span id="savePill" class="ipill" role="img" tabindex="0" aria-label="Loading your list" data-tip="Loading your list…"><svg viewBox="0 0 24 24" aria-hidden="true"></svg><i class="ipill-dot"></i></span>
       <span class="head-sep" aria-hidden="true"></span>
@@ -17,6 +19,16 @@ export const MARKUP = `
     </div>
   </header>
 
+  <div class="shell" id="shell">
+  <aside class="side g-card" id="side" aria-label="Sections">
+    <nav class="side-nav" id="viewSeg">
+      <button type="button" id="viewCalendar" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg><span>Calendar</span><b class="side-badge" id="badgeCal"></b></button>
+      <button type="button" id="viewSend" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Creators</span><b class="side-badge" id="badgeSend"></b></button>
+      <button type="button" id="viewReplies" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span>Replies</span><b class="side-badge" id="badgeReplies"></b></button>
+    </nav>
+    <div class="side-status" id="sideStatus" role="status" aria-live="polite"></div>
+  </aside>
+  <div class="shell-main">
   <div class="top-grid">
     <div class="g-hero" data-variant="a" id="insight">
       <span class="g-hero-cap">Reply rate</span>
@@ -40,14 +52,6 @@ export const MARKUP = `
       <span class="g-hero-num" id="capValue">0/40</span>
       <span class="g-hero-status" id="capStatus">40 left today</span>
       <span class="g-hero-strip"><span class="hero-bar" aria-hidden="true"><span id="capFill" style="width:0%"></span></span></span>
-    </div>
-  </div>
-
-  <div class="viewbar">
-    <div class="seg" id="viewSeg" role="group" aria-label="Switch view">
-      <button type="button" id="viewCalendar" aria-pressed="false">Calendar</button>
-      <button type="button" id="viewSend" aria-pressed="true">Creators</button>
-      <button type="button" id="viewReplies" aria-pressed="false">Replies</button>
     </div>
   </div>
 
@@ -274,6 +278,8 @@ export const MARKUP = `
       </section>
     </div>
   </main>
+  </div>
+  </div>
 </div>
 
 <div class="modal" id="modal" hidden>

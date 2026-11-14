@@ -444,8 +444,6 @@ mark.miss { background: var(--g-err-soft); color: var(--g-err); }
 }
 
 /* ---------- replies view ---------- */
-.viewbar { display: flex; justify-content: center; }
-.viewbar .seg button { font-size: 13px; padding: 8px 18px; }
 .rstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: var(--g-space-3); }
 .rstats .stat b { font-size: 34px; }
 .rcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: var(--g-space-4); align-items: start; }
@@ -498,3 +496,43 @@ mark.miss { background: var(--g-err-soft); color: var(--g-err); }
 .check input:disabled + span { color: var(--g-dim); }
 #settingsPanel input[type=time] { width: 100%; box-sizing: border-box; border: 0; border-radius: var(--g-r-input); background: var(--g-well); color: var(--g-ink); padding: 9px 12px; font: inherit; font-size: 13px; box-shadow: inset 0 0 0 1px var(--g-ring); }
 .you .help code { font-family: inherit; color: var(--g-ink); overflow-wrap: anywhere; }
+
+/* ---------- side panel ---------- */
+.shell { display: grid; grid-template-columns: 228px minmax(0, 1fr); gap: var(--g-space-5); align-items: start; }
+.shell.collapsed { grid-template-columns: minmax(0, 1fr); }
+.shell.collapsed .side { display: none; }
+.shell-main { display: grid; gap: var(--g-space-6); min-width: 0; }
+.side { position: sticky; top: 16px; padding: var(--g-space-3); display: grid; gap: var(--g-space-4); }
+.side-nav { display: grid; gap: 4px; }
+.side-nav button { appearance: none; border: 0; background: transparent; color: var(--g-muted); display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: var(--g-r-input); font: inherit; font-size: 14px; text-align: left; cursor: pointer; transition: background var(--g-dur-colour) var(--ease), color var(--g-dur-colour) var(--ease); }
+.side-nav button:hover { color: var(--g-ink); background: var(--g-bg-lift); }
+.side-nav button[aria-pressed='true'] { background: var(--g-card-2); color: var(--g-ink); box-shadow: var(--g-shadow-sm); }
+.side-nav svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.side-nav span { flex: 1; }
+.side-badge { font-family: var(--g-font-dot); font-variation-settings: 'ROND' 100; font-weight: 800; font-size: 13px; color: var(--g-accent); }
+.side-badge:empty { display: none; }
+.side-status { display: grid; grid-template-columns: auto 1fr; gap: 4px 8px; align-items: center; padding: var(--g-space-3); border-radius: var(--g-r-well); background: var(--g-well); font-size: 12px; line-height: 1.5; color: var(--g-muted); }
+.side-status b { color: var(--g-ink); font-weight: var(--g-fw-badge); font-size: 12.5px; }
+.side-status > span:not(.side-dot) { grid-column: 1 / -1; }
+.side-next { color: var(--g-ink); }
+.side-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--g-muted); }
+.side-dot[data-tone='ok'] { background: var(--g-ok); }
+.side-dot[data-tone='warn'] { background: var(--g-warn); }
+.side-dot[data-tone='bad'] { background: var(--g-err); }
+.camp-note[data-tone='bad'] { color: var(--g-err); }
+.camp-note[data-tone='warn'] { color: var(--g-warn); }
+.camp-note[data-tone='run'] { color: var(--g-ok); }
+.camp-note[data-tone='done'] { color: var(--g-muted); }
+@media (max-width: 900px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .side { position: static; }
+  .side-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .side-nav button { justify-content: center; padding: 10px 6px; font-size: 13px; gap: 6px; }
+  .side-nav span { flex: none; }
+}
+@media (max-width: 420px) { .side-nav svg { display: none; } }
+/* calendar inside the side-panel layout: name on its own line, days wrap when space is tight */
+.camp-top { flex-direction: column; align-items: flex-start; gap: 6px; }
+.camp-top b { width: 100%; }
+@media (max-width: 1500px) { .shell:not(.collapsed) .cal-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); } .shell:not(.collapsed) .cal-day { min-height: 0; } }
+@media (max-width: 1200px) { .cal-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); } .cal-day { min-height: 0; } }

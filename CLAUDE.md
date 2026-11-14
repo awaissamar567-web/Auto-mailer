@@ -106,7 +106,8 @@ Then drive it with Playwright (Chrome at `/usr/bin/google-chrome` in the cloud w
 
 ## Campaigns and calendar (built)
 
-- Views: `#viewSeg` toggles Calendar (`#calendarView`), Creators (`#sendView`) and Replies. The last view is remembered in `localStorage["creator-mailer-view"]`.
+- Views: the left side panel (`#side`, nav `#viewSeg`) switches Calendar (`#calendarView`), Creators (`#sendView`) and Replies, with count badges. `#btnSide` in the header hides it fully (`localStorage["creator-mailer-side"]`); under 900px it sits above the content as a row. The last view is remembered in `localStorage["creator-mailer-view"]`.
+- `campReason(k)` explains in words why a campaign is or isn't sending (no creators, missing tags, paused, automation off, starts at, hours over, limit reached, due now). Calendar cards and the side panel status (`renderSideStatus`, scheduler health) use it. Keep it in step with `campDue()` and `campOpen()` in `lib/engine.js`.
 - A campaign is a CSV plus template, date, time window, sender and optional per-campaign daily cap. `importText(text, source, campaignId)` skips anyone already emailed (`sentAt`, `dnc`, `bounced`) or already in another campaign, and reports them. The Creators panel has an "Add to campaign" select when open campaigns exist.
 - `firstTplFor(c)` picks the campaign's template; `pickSender` honours the campaign's sender. Quick select "All ready" excludes campaign rows; their status pill reads "Scheduled <date>".
 - Time: all campaign dates and windows are in `settings.tz` (`nowIn()`, `todayIso()`); the calendar footer shows the clock. `campDue(k)` = date reached, inside the window, under the campaign cap, and still has `canFirst` rows.
