@@ -125,8 +125,13 @@ Then drive it with Playwright (Chrome at `/usr/bin/google-chrome` in the cloud w
 - Settings: `auto {on, follow, next, counter}` (counter off by default), `autoDays weekdays|all`, `workStart`, `workEnd`. State: `cronAt`, `cronLog[]`, `cronDigest`. While the scheduler ran in the last 25 minutes the browser does not auto-start campaigns.
 - Tests: `MAIL_TEST_JSON=1` (with `MAIL_TEST_LOG=<file>`) makes `lib/mail.js` build messages without sending and makes IMAP return nothing. Never set it in Vercel. Point `KV_REST_API_URL` at a fake Upstash REST server to test the scheduler.
 
+## Dashboard (built)
+
+- `#dashView`, first item in the side panel (`#viewDash`); hides `.top-grid` while open. `renderDash()` uses `tally(list)` for every group: sent, replied (including do-not-contact), interested, not interested, question, bounced; rates divide by delivered (sent minus bounced).
+- This week vs All time (`ui.dashPeriod`). Weeks are Monday-start in the sending zone (`weekOf`). 8-week trend of emails sent (first + follow-ups), replies and interested. Tables by campaign (plus "No campaign"), by template (`c.tpl`) and by account (today/cap, bounce rate).
+- Alerts list only things that need the owner: unanswered questions, scheduler health from the side panel, campaigns whose `campReason` tone is `bad`, failed or unconfirmed rows, bounce rate over 5% after 10 sends, interested creators without a next step while that automation is off. `#badgeDash` = creators waiting for an answer.
+
 ## Roadmap: next features (planned, not built)
 
 - AI-drafted answers for "needs your reply" creators, saved as editable drafts.
-- Dashboard tab: weekly totals and per-campaign / per-template reply and interest rates.
 - Per-account caps with a warm-up ramp for new inboxes.

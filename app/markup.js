@@ -22,6 +22,7 @@ export const MARKUP = `
   <div class="shell" id="shell">
   <aside class="side g-card" id="side" aria-label="Sections">
     <nav class="side-nav" id="viewSeg">
+      <button type="button" id="viewDash" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg><span>Dashboard</span><b class="side-badge" id="badgeDash"></b></button>
       <button type="button" id="viewCalendar" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg><span>Calendar</span><b class="side-badge" id="badgeCal"></b></button>
       <button type="button" id="viewSend" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Creators</span><b class="side-badge" id="badgeSend"></b></button>
       <button type="button" id="viewReplies" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span>Replies</span><b class="side-badge" id="badgeReplies"></b></button>
@@ -54,6 +55,30 @@ export const MARKUP = `
       <span class="g-hero-strip"><span class="hero-bar" aria-hidden="true"><span id="capFill" style="width:0%"></span></span></span>
     </div>
   </div>
+
+  <section class="panel g-card" id="dashView" aria-labelledby="hDash" hidden>
+    <div class="panel-head">
+      <div>
+        <h2 id="hDash">Dashboard</h2>
+        <p class="help" id="dashSub"></p>
+      </div>
+      <div class="seg" role="group" aria-label="Period">
+        <button type="button" data-dp="week" aria-pressed="true">This week</button>
+        <button type="button" data-dp="all" aria-pressed="false">All time</button>
+      </div>
+    </div>
+    <ul class="dash-alerts" id="dashAlerts"></ul>
+    <div class="rstats" id="dashStats"></div>
+    <div class="dash-block">
+      <h3 class="h3">Last 8 weeks</h3>
+      <div class="dash-trend" id="dashTrend"></div>
+      <div class="dash-legend"><span><i class="lg-sent"></i>Emails sent</span><span><i class="lg-rep"></i>Replied</span><span><i class="lg-int"></i>Interested</span></div>
+    </div>
+    <div class="dash-block"><h3 class="h3">By campaign</h3><div class="table-wrap dash-table" id="dashCamps"></div></div>
+    <div class="dash-block"><h3 class="h3">By template</h3><div class="table-wrap dash-table" id="dashTpls"></div></div>
+    <div class="dash-block"><h3 class="h3">By account</h3><div class="table-wrap dash-table" id="dashAccts"></div></div>
+    <p class="help">Rates count first emails delivered (bounces excluded). A reply counts when a creator wrote back; auto-replies don't count. Weeks start on Monday in your sending time zone.</p>
+  </section>
 
   <section class="panel g-card" id="calendarView" aria-labelledby="hCal" hidden>
     <div class="panel-head">

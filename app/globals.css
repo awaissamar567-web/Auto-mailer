@@ -536,3 +536,28 @@ mark.miss { background: var(--g-err-soft); color: var(--g-err); }
 .camp-top b { width: 100%; }
 @media (max-width: 1500px) { .shell:not(.collapsed) .cal-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); } .shell:not(.collapsed) .cal-day { min-height: 0; } }
 @media (max-width: 1200px) { .cal-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); } .cal-day { min-height: 0; } }
+
+/* ---------- dashboard ---------- */
+.dash-block { display: grid; gap: var(--g-space-3); }
+.dash-alerts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.dash-alerts li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: var(--g-r-well); font-size: 13px; background: var(--g-well); }
+.dash-alerts li[data-tone='bad'] { background: var(--g-err-soft); color: var(--g-err); }
+.dash-alerts li[data-tone='warn'] { background: var(--g-warn-soft); color: var(--g-warn); }
+.dash-alerts li[data-tone='ok'] { background: var(--g-ok-soft); color: var(--g-ok); }
+.dash-alerts .linkbtn { flex: none; color: inherit; }
+.dash-trend { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: var(--g-space-2); background: var(--g-well); border-radius: var(--g-r-well); padding: var(--g-space-4) var(--g-space-3) var(--g-space-3); }
+.tr-col { display: grid; justify-items: center; gap: 4px; min-width: 0; }
+.tr-bars { height: 120px; width: 100%; display: flex; align-items: flex-end; justify-content: center; gap: 3px; }
+.tr-bars span { width: 22%; max-width: 14px; min-height: 2px; border-radius: 3px 3px 0 0; }
+.tr-sent, .lg-sent { background: var(--g-track-soft); }
+.tr-rep, .lg-rep { background: var(--g-accent); }
+.tr-int, .lg-int { background: var(--g-ok); }
+.tr-n { font-family: var(--g-font-dot); font-variation-settings: 'ROND' 100; font-weight: 800; font-size: 15px; color: var(--g-ink); }
+.tr-lbl { font-size: 11px; color: var(--g-muted); white-space: nowrap; }
+.dash-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--g-fs-cap); color: var(--g-muted); }
+.dash-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.dash-table { max-height: none; }
+.dash-table table { min-width: 560px; }
+.dash-table td .sub { display: block; color: var(--g-muted); font-size: var(--g-fs-cap); }
+.dash-table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) { .tr-lbl { font-size: 9px; } .tr-bars { height: 90px; } }
