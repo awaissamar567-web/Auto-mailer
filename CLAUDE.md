@@ -113,6 +113,19 @@ Then drive it with Playwright (Chrome at `/usr/bin/google-chrome` in the cloud w
 - Runner: `runBatch(kind, ids, camp)` marks the campaign `running`, stops for the day when `campStop()` says the cap is hit or the window closed (`run.note`), and leaves it `scheduled` (more to send), `paused` (user pressed Stop) or `done`. Leftovers continue in the same window on following days. `tickCampaigns()` auto-starts the earliest due campaign every minute while the tab is open; a run that ended in an error backs off 30 minutes (`errAt`).
 - Calendar: Monday-start week, drag a non-done campaign to another day, click to edit (pause, resume, send now, show creators, delete; delete removes only its unsent creators).
 
-## Roadmap: next feature (planned, not built)
+## Server scheduler (built)
 
-**Server-side scheduler (Vercel Cron).** `/api/cron` protected by `CRON_SECRET`: lock in Redis, load the state blob, check inboxes and tag, send a small slice per account in priority order (queued answers, next steps, due follow-ups, counter-questions, due campaigns), save, and email a digest. It must reuse the same rules the browser runner uses (`campDue`, caps, `locked`, two follow-ups max).
+- `app/api/cron/route.js` runs `runScheduler()` from `lib/scheduler.js`. Auth: `Authorization: Bearer CRON_SECRET` (Vercel Cron, cron-job.org) or a logged-in session ("Run now", 50 s budget). `middleware.js` lets `/api/cron` through so the route can check the secret itself. `maxDuration` 300, scheduled budget 240 s.
+- `vercel.json` has a daily cron (Hobby plans allow only daily). For every 15 minutes the owner points an outside scheduler at `/api/cron` with the Bearer header; the Automation panel explains it.
+- A run: Redis lock `creator-mailer:lock:<user>`, load the state blob, inbox check and tagging, then one email per `gap` (jittered) in priority order: next steps, counter-questions, follow-ups (these three only in work hours `workStart`-`workEnd` on `autoDays`), then due campaigns. It saves after every send and re-reads between sends so pauses in the browser take effect. Ends with a digest email to account 1 (or `DIGEST_TO`) when there are new interested / question / not-interested replies or new errors, and a `cronLog` entry.
+- `lib/engine.js` is the server copy of the browser rules (templating, `canFirst`, `isDue`, `canNext`, `canCounter`, `campOpen`, caps, work hours). Keep it in step with `lib/mailer-client.js`.
+- No double sends: every step has a once key `creator-mailer:once:<user>:<contactId>:<first|follow1|follow2|next|counter>` claimed with SET NX. `/api/send` takes `once` and answers `409 duplicate` (with the Message-ID when known); the browser records that as sent. Clear refusals free the key; timeouts keep it.
+- No lost sends: `mergeState(stored, incoming)` in `lib/engine.js` runs on every `PUT /api/state` and every scheduler save. Progress fields (send, follow-up, next/counter/answer, newer reply, failed first send, campaign done) win from whichever copy is further along. `resetAt`, `replyClearedAt` and campaign `editedAt` mark deliberate undos in the browser. PUT returns the merged `state` when it differs; the browser adopts it, and polls `/api/state` every 45 s.
+- Settings: `auto {on, follow, next, counter}` (counter off by default), `autoDays weekdays|all`, `workStart`, `workEnd`. State: `cronAt`, `cronLog[]`, `cronDigest`. While the scheduler ran in the last 25 minutes the browser does not auto-start campaigns.
+- Tests: `MAIL_TEST_JSON=1` (with `MAIL_TEST_LOG=<file>`) makes `lib/mail.js` build messages without sending and makes IMAP return nothing. Never set it in Vercel. Point `KV_REST_API_URL` at a fake Upstash REST server to test the scheduler.
+
+## Roadmap: next features (planned, not built)
+
+- AI-drafted answers for "needs your reply" creators, saved as editable drafts.
+- Dashboard tab: weekly totals and per-campaign / per-template reply and interest rates.
+- Per-account caps with a warm-up ramp for new inboxes.

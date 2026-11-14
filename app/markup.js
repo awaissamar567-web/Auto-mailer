@@ -241,6 +241,29 @@ export const MARKUP = `
         </div>
         <p class="help">Keep this tab open while a batch runs. Gaps are randomized a little so the sends don't look automated. Gmail caps free accounts around 500 emails a day, but cold outreach from one inbox gets flagged far sooner, so 20 to 40 a day is a safer pace.</p>
         <div class="divider"></div>
+        <h3 class="h3">Automation</h3>
+        <p class="help" id="autoStatus" role="status" aria-live="polite"></p>
+        <p class="help bad" id="autoErr" hidden></p>
+        <label class="check"><input type="checkbox" id="autoOn"> <span><b>Send automatically</b>, even with this tab closed: campaigns in their windows, plus the steps below</span></label>
+        <label class="check"><input type="checkbox" id="autoFollow"> <span>Follow-ups to anyone who hasn't replied (two at most)</span></label>
+        <label class="check"><input type="checkbox" id="autoNext"> <span>Next-step email to creators tagged Interested</span></label>
+        <label class="check"><input type="checkbox" id="autoCounter"> <span>Counter-question after a soft no (once, never after a firm no)</span></label>
+        <div class="set-grid">
+          <div class="field"><label for="autoDays">Follow-ups go out on</label><select id="autoDays"><option value="weekdays">Weekdays only</option><option value="all">Every day</option></select></div>
+          <div class="field"><label for="workStart">Between</label><input type="time" id="workStart"></div>
+          <div class="field"><label for="workEnd">And</label><input type="time" id="workEnd"></div>
+        </div>
+        <div class="row"><button class="btn" type="button" id="btnRunNow">Run now</button><span class="help">Checks replies and sends anything due right now.</span></div>
+        <details class="you">
+          <summary>Run it every 15 minutes</summary>
+          <div class="help" style="display:grid;gap:8px;margin-top:10px">
+            <span>Vercel runs the scheduler once a day on the free plan. For every 15 minutes, use a free scheduler such as cron-job.org:</span>
+            <span>1. Create a job for <code>https://YOUR-APP.vercel.app/api/cron</code>, every 15 minutes, method GET.</span>
+            <span>2. Under Headers add <code>Authorization</code> with the value <code>Bearer</code> followed by a space and your <code>CRON_SECRET</code> from Vercel, Settings, Environment Variables.</span>
+            <span>3. Save, then watch the line above change to "Scheduler last ran".</span>
+          </div>
+        </details>
+        <div class="divider"></div>
         <h3 class="h3">Backup</h3>
         <div class="row">
           <button class="btn sm" type="button" id="btnBackup">Download backup</button>

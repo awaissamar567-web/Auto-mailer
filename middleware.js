@@ -4,7 +4,8 @@ import { verifyToken, COOKIE } from './lib/auth';
 // Everything except the login page, the login API and static assets needs a valid session.
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
-  if (pathname === '/login' || pathname === '/api/login') return NextResponse.next();
+  // /api/cron checks its own secret (Vercel Cron or an outside scheduler), or a session for Run now.
+  if (pathname === '/login' || pathname === '/api/login' || pathname === '/api/cron') return NextResponse.next();
 
   const session = await verifyToken(request.cookies.get(COOKIE)?.value);
   if (session) return NextResponse.next();

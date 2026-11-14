@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '../../../lib/auth';
 import { accounts, findAccount, getTransport, mapMailError, EMAIL_RE } from '../../../lib/mail';
+import { redisConfig, onceKey, claimOnce, settleOnce } from '../../../lib/store';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -10,7 +11,8 @@ const MSG_ID = /^<[^<>\s]+@[^<>\s]+>$/;
 const fail = (status, code, message) => NextResponse.json({ ok: false, code, message }, { status });
 
 export async function POST(request) {
-  if (!(await getSession(request))) return fail(401, 'unauthorized', 'Log in again.');
+  const session = await getSession(request);
+  if (!session) return fail(401, 'unauthorized', 'Log in again.');
 
   if (!accounts().length) {
     return fail(500, 'config', 'Gmail is not set up. Add GMAIL_USER and GMAIL_APP_PASSWORD in your Vercel project settings, then redeploy.');
@@ -48,11 +50,25 @@ export async function POST(request) {
     message.references = refs.concat([inReplyTo]);
   }
 
+  // once = "<contactId>:<step>". With cloud storage on, a step is sent at most once, even if the
+  // scheduler and this browser both try it.
+  let key = null;
+  if (typeof b.once === 'string' && b.once && redisConfig()) {
+    key = onceKey(session.u, b.once);
+    try {
+      const prior = await claimOnce(key);
+      if (prior) return NextResponse.json({ ok: false, code: 'duplicate', from: acct.id, messageId: prior === 'pending' ? '' : prior, message: prior === 'pending' ? 'This email is being sent by the scheduler right now.' : 'This email was already sent.' }, { status: 409 });
+    } catch { key = null; }
+  }
+
   try {
     const info = await getTransport(acct).sendMail(message);
+    if (key) await settleOnce(key, info.messageId || 'sent').catch(() => {});
     return NextResponse.json({ ok: true, messageId: info.messageId || '', from: acct.id });
   } catch (e) {
     const [status, payload] = mapMailError(e, acct);
+    // Only a clear refusal frees the claim. A timeout may have sent, so it stays claimed.
+    if (key && payload.code !== 'unconfirmed' && payload.code !== 'unknown') await settleOnce(key, null).catch(() => {});
     return NextResponse.json({ ok: false, from: acct.id, ...payload }, { status });
   }
 }

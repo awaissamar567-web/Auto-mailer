@@ -491,3 +491,10 @@ mark.miss { background: var(--g-err-soft); color: var(--g-err); }
 .modal-card.wide { max-width: 640px; }
 @media (max-width: 980px) { .cal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cal-day { min-height: 0; } }
 @media (max-width: 520px) { .cal-grid { grid-template-columns: 1fr; } }
+
+/* ---------- automation ---------- */
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; cursor: pointer; }
+.check input { margin-top: 3px; flex: none; width: 16px; height: 16px; }
+.check input:disabled + span { color: var(--g-dim); }
+#settingsPanel input[type=time] { width: 100%; box-sizing: border-box; border: 0; border-radius: var(--g-r-input); background: var(--g-well); color: var(--g-ink); padding: 9px 12px; font: inherit; font-size: 13px; box-shadow: inset 0 0 0 1px var(--g-ring); }
+.you .help code { font-family: inherit; color: var(--g-ink); overflow-wrap: anywhere; }

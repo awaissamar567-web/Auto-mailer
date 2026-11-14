@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '../../../lib/auth';
 import { redis, redisConfig, stateKey } from '../../../lib/store';
+import { mergeState } from '../../../lib/engine';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -34,8 +35,14 @@ export async function PUT(request) {
   if (!body || typeof body.state !== 'object' || !body.state) return NextResponse.json({ ok: false, code: 'invalid' }, { status: 400 });
 
   try {
-    await redis(['SET', stateKey(session.u), JSON.stringify(body.state)]);
-    return NextResponse.json({ ok: true });
+    // Fold in anything the scheduler recorded since this browser last loaded, so a save never undoes a send.
+    const raw = await redis(['GET', stateKey(session.u)]);
+    let stored = null;
+    try { stored = raw ? JSON.parse(raw) : null; } catch { stored = null; }
+    const merged = mergeState(stored, body.state);
+    const out = JSON.stringify(merged);
+    await redis(['SET', stateKey(session.u), out]);
+    return NextResponse.json(out === JSON.stringify(body.state) ? { ok: true } : { ok: true, state: merged });
   } catch (e) {
     return NextResponse.json({ ok: false, code: 'storage', message: 'Could not save to cloud storage.' }, { status: 502 });
   }
