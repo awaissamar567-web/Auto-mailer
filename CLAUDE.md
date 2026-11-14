@@ -94,22 +94,15 @@ Then drive it with Playwright (Chrome at `/usr/bin/google-chrome` in the cloud w
 - Set `localStorage['creator-mailer-tour-v1'] = 'done'` to skip the walkthrough.
 - Check: login, CSV upload (`#csvFile`), batch send (`[data-q=ready]`, `#btnFirst`, `#mOk`), rotation `from` values, follow-up `inReplyTo`, and no page errors.
 
+## Reply reader (built)
+
+- `app/api/replies/route.js` reads each sending account over IMAP (`lib/imap.js`, `imapflow`, same App Password) in `[Gmail]/All Mail`, read-only. Only mail from creator addresses, mail whose `References` holds one of our Message-IDs, and mailer-daemon bounces are fetched; bodies are capped at 40 KB and only a 400-char snippet goes back to the browser.
+- Tagging in `lib/replies.js`: hard rules first (bounce, auto-reply headers, stop/unsubscribe), then Groq (`GROQ_API_KEY`, optional `GROQ_MODEL`, default `llama-3.3-70b-versatile`) with keyword rules as the fallback. `/api/status` reports `ai: true|false`.
+- Contact fields: `reply {tag, soft, by: ai|rules|manual, snippet, at, from, msgId}`, `dnc`, `bounced`, `nextAt`, `counterAt`, `answerAt`, `answerCount`. Tags: `interested, not_interested (soft flag), question, no_reply, auto_reply, bounced, do_not_contact`. A manual tag is kept until the creator writes again. `tagOf(c)` is the single source of truth.
+- New threaded template kinds: `followup2` (sent as the second follow-up, due 6 days after the first email), `next` (interested), `counter` (soft no, once). Follow-ups reply to our Message-ID; next-step, counter and typed answers reply to the creator's `reply.msgId` with our id in `References`. `/api/send` accepts `references[]`.
+- Two follow-ups max. A follow-up batch checks the inbox first and skips anyone who replied. `locked(c)` (dnc or bounced) blocks every send.
+- Replies view: `#viewSeg` toggles `#sendView` / `#repliesView`. Opening it auto-checks if the last check is over 30 minutes old. "Download interested list" exports the interested creators as CSV (the owner's CRM step).
+
 ## Roadmap: next feature (planned, not built)
 
-**Reply reader.** Read replies from creators and act on them.
-
-- Read Gmail over IMAP (`imap.gmail.com:993`, TLS) with the **same App Password** used for SMTP. IMAP is always on for personal Gmail accounts. Use `imapflow` in a new `app/api/replies` route.
-- Only fetch messages **from addresses on the creator list**, since each contact's first `sentAt`, across `INBOX` and `[Gmail]/All Mail`. Match on `In-Reply-To`/`References` to the stored `messageId`, falling back to the sender address. Strip quoted text and store a short snippet only.
-- Tags: `interested, not_interested, question (needs your reply), no_reply, auto_reply, bounced, do_not_contact`. Bounces (mailer-daemon) mark the email bad. Auto-replies don't count as replies. "stop / unsubscribe / remove me" locks the contact. Every tag can be overridden manually in one click.
-- Replies view: totals (sent, replied, interested, not interested, needs reply, no reply, bounced, reply rate, interest rate), one card per creator with the snippet, tag and next action.
-- Actions, all sent in-thread with the existing batch sender and daily caps:
-  - No reply: follow-up 1 (about 2 days), follow-up 2 (about 6 days), then stop.
-  - Interested: next-step template.
-  - Not interested (soft no only): one polite counter-question, once, never to `do_not_contact`.
-  - Question: show their message with a reply box.
-- Later: automatic follow-ups with the tab closed. Needs Redis for server-side state plus a Vercel Cron job, and must skip anyone who replied.
-
-**Open decisions (ask the owner before building):**
-1. What interested creators get next: a free-copy link, an affiliate signup link, a call link, or something else.
-2. Tagging: keyword rules with manual override (free) or AI tagging via Groq's free tier.
-3. Confirm the counter-question rule: one question, soft no only, sent once.
+**Automatic follow-ups with the tab closed.** Needs Redis for server-side state plus a Vercel Cron job that runs the same inbox check first and skips anyone who replied.

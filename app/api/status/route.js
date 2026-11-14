@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSession } from '../../../lib/auth';
 import { accounts, publicAccounts, getTransport, mapMailError } from '../../../lib/mail';
 import { redisConfig } from '../../../lib/store';
+import { aiEnabled } from '../../../lib/replies';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -27,5 +28,5 @@ export async function GET(request) {
     }));
   }
 
-  return NextResponse.json({ ok: true, user: session.u, mail, cloud: !!redisConfig() });
+  return NextResponse.json({ ok: true, user: session.u, mail, cloud: !!redisConfig(), ai: aiEnabled() });
 }

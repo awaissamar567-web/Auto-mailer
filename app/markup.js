@@ -43,7 +43,28 @@ export const MARKUP = `
     </div>
   </div>
 
-  <main class="grid">
+  <div class="viewbar">
+    <div class="seg" id="viewSeg" role="group" aria-label="Switch view">
+      <button type="button" id="viewSend" aria-pressed="true">Outreach</button>
+      <button type="button" id="viewReplies" aria-pressed="false">Replies</button>
+    </div>
+  </div>
+
+  <section class="panel g-card" id="repliesView" aria-labelledby="hReplies" hidden>
+    <div class="panel-head">
+      <h2 id="hReplies">Replies</h2>
+      <button class="btn primary" type="button" id="btnCheck">Check for replies</button>
+    </div>
+    <p class="help" id="rcStatus" role="status" aria-live="polite"></p>
+    <p class="help bad" id="rcErr" hidden></p>
+    <div class="rstats" id="rStats"></div>
+    <div class="filters" id="rFilters" role="group" aria-label="Filter by tag"></div>
+    <div class="bulk" id="rBulk"></div>
+    <div class="rcards" id="rCards"></div>
+    <p class="help">Checking reads only mail from creators on your list, replies to your emails, and bounce notices. Only a short snippet of each reply is saved.</p>
+  </section>
+
+  <main class="grid" id="sendView">
     <div class="col">
       <section class="panel g-card" id="creatorsPanel" aria-labelledby="hCreators">
         <div class="panel-head">

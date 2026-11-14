@@ -6,6 +6,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
+const MSG_ID = /^<[^<>\s]+@[^<>\s]+>$/;
 const fail = (status, code, message) => NextResponse.json({ ok: false, code, message }, { status });
 
 export async function POST(request) {
@@ -32,7 +33,7 @@ export async function POST(request) {
   if (!text.trim()) return fail(400, 'invalid', 'The email body is empty.');
   if (text.length > 20000) return fail(400, 'invalid', 'The email body is too long.');
 
-  const inReplyTo = typeof b.inReplyTo === 'string' && /^<[^<>\s]+@[^<>\s]+>$/.test(b.inReplyTo) ? b.inReplyTo : null;
+  const inReplyTo = typeof b.inReplyTo === 'string' && MSG_ID.test(b.inReplyTo) ? b.inReplyTo : null;
 
   const message = {
     from: acct.fromName ? { name: acct.fromName, address: acct.user } : acct.user,
@@ -41,8 +42,10 @@ export async function POST(request) {
     text,
   };
   if (inReplyTo) {
+    // Replying to a creator's reply: keep the whole thread in References, ending with the message we answer.
+    const refs = (Array.isArray(b.references) ? b.references : []).filter((r) => typeof r === 'string' && MSG_ID.test(r) && r !== inReplyTo).slice(0, 10);
     message.inReplyTo = inReplyTo;
-    message.references = [inReplyTo];
+    message.references = refs.concat([inReplyTo]);
   }
 
   try {

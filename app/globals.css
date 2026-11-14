@@ -442,3 +442,23 @@ mark.miss { background: var(--g-err-soft); color: var(--g-err); }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .btn:hover:not(:disabled) { transform: none; }
 }
+
+/* ---------- replies view ---------- */
+.viewbar { display: flex; justify-content: center; }
+.viewbar .seg button { font-size: 13px; padding: 8px 18px; }
+.rstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: var(--g-space-3); }
+.rstats .stat b { font-size: 34px; }
+.rcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: var(--g-space-4); align-items: start; }
+.rcard { background: var(--g-card-2); border-radius: var(--g-r-nested); box-shadow: var(--g-shadow-sm); padding: var(--g-space-4); display: grid; gap: var(--g-space-3); min-width: 0; }
+.rc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--g-space-3); }
+.rc-who { display: grid; gap: 2px; min-width: 0; }
+.rc-who b { font-weight: var(--g-fw-badge); overflow-wrap: anywhere; }
+.rc-who .sub { font-size: var(--g-fs-cap); color: var(--g-muted); overflow-wrap: anywhere; }
+.rc-snip { margin: 0; padding: var(--g-space-3) var(--g-space-4); border-radius: var(--g-r-well); background: var(--g-well); font-size: 13px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.rc-next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--g-space-2) var(--g-space-3); font-size: 12.5px; }
+.rc-answer { display: grid; gap: var(--g-space-2); }
+.rc-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--g-space-2); font-size: var(--g-fs-cap); color: var(--g-muted); }
+.rc-foot label { display: inline-flex; align-items: center; gap: 8px; }
+.rc-foot select { width: auto; padding-top: 5px; padding-bottom: 5px; font-size: var(--g-fs-cap); }
+.help.bad { color: var(--g-err); }
+#mBody .mail { margin: var(--g-space-3) 0; }
